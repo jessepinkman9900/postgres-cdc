@@ -1,0 +1,19 @@
+{
+  "name": "dbz-<app>-<db_region>-<table_name>-connector",
+  "config": {
+    "plugin.name": "pgoutput",
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "",
+    "database.port": "5432",
+    "database.user": "",
+    "database.password": "",
+    "database.dbname" : "",
+    "slot.name": "<table_name>_<db_region>_dbz",
+    "publication.name": "<table_name>_connection_dbz",
+    "publication.autocreate.mode": "disabled", // https://debezium.io/documentation/reference/2.3/connectors/postgresql.html#postgresql-publication-autocreate-mode
+    "topic.prefix": "dz",
+    "table.include.list": "<schema>.<table_name>", // https://debezium.io/documentation/reference/2.3/connectors/postgresql.html#postgresql-property-table-include-list
+    "snapshot.mode": "never", // https://debezium.io/documentation/reference/2.3/connectors/postgresql.html#postgresql-property-snapshot-mode
+    "skipped.operations": "u,d,t" // https://debezium.io/documentation/reference/2.3/connectors/postgresql.html#postgresql-property-skipped-operations
+  }
+}

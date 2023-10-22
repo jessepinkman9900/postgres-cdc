@@ -1,0 +1,48 @@
+name: Build And Push Image to Container Registry
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image Tag'
+        type: string
+        required: true
+      environment:
+        description: 'Package Environment'
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - stage
+          - prod
+        tag:
+          description: 'Select Environment'
+          required: true
+          type: string
+
+env:
+  # TODO: update 
+  REPOSITORY_URL: todo
+  JFROG_URL: todo
+  DOCKER_REGISTRY: todo
+  IMAGE_NAME: debezium-connect
+  IMAGE_TAG: ${{ inputs.image_tag }}
+  DOCKER: docker-${{ inputs.environment }}
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+        - name: Setup JFrog CLI
+          uses: jfrog/setup-jfrog-cli@v1.2.0
+
+        - name: Build and Push Docker Image
+          run: |
+            cd docker
+            docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }} $REPOSITORY_URL
+            docker build -t $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG -f Dockerfile .
+            jfrog rt config --url=$JFROG_URL --user=${{ secrets.JFROG_USER }} --access-token=${{ secrets.JFROG_PASSWORD }} --interactive=false
+            jfrog rt c show
+            jfrog rt docker-push $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG $DOCKER --build-name=$IMAGE_NAME-docker --build-number=$IMAGE_TAG
