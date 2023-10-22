@@ -36,3 +36,7 @@ Postgres CDC using Debezium Kafka Connect as events
 ### 3.1 Custom Debezium Image
 - comment out lines in [`java.security`](./docker/java.security) and [`java.config`](./docker/java.config) due to issues with off-the-shelf `debezium/connect:2.3.0.Final` image connecting with Azure Postgres Flexible Server
   - Implemented Solution: https://stackoverflow.com/a/75827811 
+
+
+## Misc
+- [Kafka UI](https://github.com/provectus/kafka-ui)
